@@ -25,6 +25,19 @@
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>local</id>
+			<distributionManagement>
+				<repository>
+					<id>local</id>
+					<name>local</name>
+					<url>file://localhost/var/mvn/repo</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+	</profiles>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
