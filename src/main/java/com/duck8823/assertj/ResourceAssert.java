@@ -21,6 +21,7 @@ public class ResourceAssert extends AbstractAssert<ResourceAssert, String> {
 	 * @return ResourceAssert
 	 */
 	public ResourceAssert isEqualToResource(String name) {
+		name = name.replaceFirst("^/", "");
 		return isEqualTo(this.getClass().getClassLoader().getResourceAsStream(name));
 	}
 
