@@ -16,3 +16,5 @@ public void ファイルの検証に成功する() {
 	assertThat("Hello\nWorld.").isEqualToFile(new File("path/to/expect"));
 }
 ```
+## LICENSE
+MIT License
