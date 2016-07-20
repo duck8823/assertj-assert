@@ -20,7 +20,7 @@ public class ResourceAssert extends AbstractAssert<ResourceAssert, String> {
 	 * @param name リソース
 	 * @return ResourceAssert
 	 */
-	public ResourceAssert isEqualToResource(String name) {
+	public ResourceAssert isEqualToResource(String name) throws IOException {
 		name = name.replaceFirst("^/", "");
 		return isEqualTo(this.getClass().getClassLoader().getResourceAsStream(name));
 	}
@@ -30,25 +30,18 @@ public class ResourceAssert extends AbstractAssert<ResourceAssert, String> {
 	 * @param file ファイル
 	 * @return ResourceAssert
 	 */
-	public ResourceAssert isEqualToFile(File file) {
-		try {
-			return isEqualTo(new FileInputStream(file));
-		} catch (FileNotFoundException e) {
-			throw new IllegalStateException("ファイルが存在しません.");
-		}
+	public ResourceAssert isEqualToFile(File file) throws IOException {
+		return isEqualTo(new FileInputStream(file));
 	}
 
-	private ResourceAssert isEqualTo(InputStream stream) {
+	protected ResourceAssert isEqualTo(InputStream stream) throws IOException {
 		this.isNotNull();
 
 		List<String> actual = Arrays.asList(this.actual.split("\r\n|\r|\n"));
 		List<String> expect = new ArrayList<>();
-		try(BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
-			for (String line; (line = reader.readLine()) != null; ) {
-				expect.add(line);
-			}
-		} catch (IOException e) {
-			throw new IllegalStateException("ファイルを読み込めませんでした.");
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		for (String line; (line = reader.readLine()) != null; ) {
+			expect.add(line);
 		}
 
 		Set<String[]> fails = new LinkedHashSet<>();

@@ -6,6 +6,9 @@ package com.duck8823.assertj;
  */
 public class Assertions {
 
+	protected Assertions() {
+	}
+
 	public static ResourceAssert assertThat(String actual) {
 		return new ResourceAssert(actual);
 	}
