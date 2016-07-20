@@ -3,6 +3,7 @@ package com.duck8823.assertj;
 import org.assertj.core.api.AbstractAssert;
 
 import java.io.*;
+import java.util.*;
 
 /**
  * 文字列とリソースの内容を検証する.
@@ -20,6 +21,7 @@ public class ResourceAssert extends AbstractAssert<ResourceAssert, String> {
 	 * @return ResourceAssert
 	 */
 	public ResourceAssert isEqualToResource(String name) {
+		name = name.replaceFirst("^/", "");
 		return isEqualTo(this.getClass().getClassLoader().getResourceAsStream(name));
 	}
 
@@ -39,18 +41,34 @@ public class ResourceAssert extends AbstractAssert<ResourceAssert, String> {
 	private ResourceAssert isEqualTo(InputStream stream) {
 		this.isNotNull();
 
-		StringBuilder sb = new StringBuilder();
+		List<String> actual = Arrays.asList(this.actual.split("\r\n|\r|\n"));
+		List<String> expect = new ArrayList<>();
 		try(BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
 			for (String line; (line = reader.readLine()) != null; ) {
-				sb.append(line).append("\n");
+				expect.add(line);
 			}
-			sb.delete(sb.lastIndexOf("\n"), sb.length());
 		} catch (IOException e) {
 			throw new IllegalStateException("ファイルを読み込めませんでした.");
 		}
 
-		if(!this.actual.equals(sb.toString())){
-			this.failWithMessage("内容が一致しません.\n(実際の値=\"%s\")\n（期待値=\"%s\"）", this.actual, sb.toString());
+		Set<String[]> fails = new LinkedHashSet<>();
+		for(int i = 0; i < actual.size() || i < expect.size(); i++) {
+			if(i >= actual.size()) {
+				fails.add(new String[]{Integer.toString(i + 1), "", expect.get(i)});
+			} else if(i >= expect.size()) {
+				fails.add(new String[]{Integer.toString(i + 1), actual.get(i), ""});
+			} else if(!actual.get(i).equals(expect.get(i))){
+				fails.add(new String[]{Integer.toString(i + 1), actual.get(i), expect.get(i)});
+			}
+		}
+
+		if(!fails.isEmpty()){
+			StringBuilder sb = new StringBuilder();
+			sb.append("内容が一致しません.\n");
+			for(String[] fail : fails){
+				sb.append(fail[0]).append("行目:\t").append(fail[1]).append(" << ").append(fail[2]).append("\n");
+			}
+			this.failWithMessage(sb.toString());
 		}
 
 		return this;

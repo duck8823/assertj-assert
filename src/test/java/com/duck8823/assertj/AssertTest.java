@@ -15,18 +15,18 @@ public class AssertTest {
 
 	@Test
 	public void リソースの検証に成功する() {
-		assertThat("Hello\nNew\nWorld.").isEqualToResource("expect");
+		assertThat("Hello\nNew\rWorld.").isEqualToResource("expect");
 	}
 
 	@Test
 	public void ファイルの検証に成功する() {
-		assertThat("Hello\nNew\nWorld.").isEqualToFile(new File("./src/test/resources/expect"));
+		assertThat("Hello\r\nNew\nWorld.").isEqualToFile(new File("./src/test/resources/expect"));
 	}
 
 	@Test
 	public void リソースの検証に失敗する() {
 		try {
-			assertThat("Hello\nnew\nWorld.").isEqualToResource("expect");
+			assertThat("Hello\nnew\nWorld.").isEqualToResource("/expect");
 			throw new Exception();
 		} catch (AssertionError ignore) {
 		} catch (Exception e) {
