@@ -1,4 +1,5 @@
 # assertj-assert
+[![](https://jitpack.io/v/duck8823/assertj-assert.svg)](https://jitpack.io/#duck8823/assertj-assert)
 [![Build Status](https://travis-ci.org/duck8823/assertj-assert.svg?branch=master)](https://travis-ci.org/duck8823/assertj-assert)
 [![Coverage Status](https://coveralls.io/repos/github/duck8823/assertj-assert/badge.svg?branch=master)](https://coveralls.io/github/duck8823/assertj-assert?branch=master)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)  
